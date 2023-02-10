@@ -1,0 +1,11 @@
+.leaflet-container {
+    width: inherit;
+    height: inherit;
+
+}
+
+.Map {
+    margin-top: 10px;
+    width: 1900px;
+    height: 650px;
+}

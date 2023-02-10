@@ -1,38 +1,41 @@
+import React from "react";
+import axios from 'axios';
 import Supplier from "./Supplier";
 
-const suppliers= [
-    {
-      id: 1,
-      name: "Fournisseur 1 ",
-      status: true,
-      checkedAt: new Date(),
-    },
-    {
-      id: 2,
-      name: "Fournisseur 2",
-      status: false,
-      checkedAt: new Date(),
-    },
-  ];
+// Définition du composant React "Card"
+function Card() {
+  // Déclaration de l'état local "suppliers" en utilisant la fonction "React.useState"
+  const [suppliers, setSuppliers] = React.useState([]);
 
+  // URL de l'API
+  const baseURL = "http://localhost:8000/api/suppliers";
 
-  function SupplierList () {
-    return (
-      <div className="container bg-success">
-        <h2 className="mb-4 text-center text-white">Liste des fournisseurs</h2>
-        <div className="row">
-          {suppliers.map(supplier => (
-            <div className="col-sm-6 col-md-4 col-lg-3" key={supplier.id}>
-              <Supplier 
-                name={supplier.name} 
-                checkedAt={supplier.checkedAt.toLocaleDateString} 
-                status={supplier.status}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  // Utilisation de la fonction "React.useEffect" pour effectuer la requête API lorsque le composant est monté
+  React.useEffect(() => {
+    axios.get(baseURL)
+      .then((response) => {
+        // Mise à jour de l'état local avec les données reçues
+        setSuppliers(response.data);
+      })
+  }, []);
 
-export default SupplierList
+  // Si les données n'ont pas encore été reçues, un message est affiché
+  if (!suppliers.data) return <h1>Requête en cours</h1>;
+
+  // Sinon, le composant "Supplier" est rendu pour chaque objet dans les données
+  return (
+    <div>
+      {suppliers.data.map(supplier =>
+        <Supplier 
+          key={supplier.id} 
+          name={supplier.name} 
+          status={supplier.status ? "Stock Ok" : "Stock Off"}
+          checkedAt={supplier.checkedAt.toLocaleString()}
+        />
+      )}
+    </div>
+  );
+}
+
+// Export du composant "Card"
+export default Card;
