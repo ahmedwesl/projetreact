@@ -3,16 +3,44 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from "react-router-dom"
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import SuppliersList from "./SuppliersList";
+import SupplierMap from "./SuppliersMap";
+import {SupplierProvider} from "./SupplierContext";
+
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <App/>,
+        children: [
+            {
+                path: "/suppliers",
+                element: <SupplierProvider>
+                    <SuppliersList/>
+                </SupplierProvider>,
+            },
+            {
+                path: "/map",
+                element: <SupplierProvider>
+                    <SupplierMap/>
+                </SupplierProvider>,
+            },
+
+        ],
+    },
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+);
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+    <React.StrictMode>
+        <RouterProvider router={router}/>
+    </React.StrictMode>
 );
-
 
 
 
